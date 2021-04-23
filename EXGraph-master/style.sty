@@ -1,0 +1,56 @@
+forall Graph A
+{
+    A.icon = Circle {
+        strokeWidth: 0.0
+        color: rgba(0.0, 0.0, 0.0, 0.0)
+    }
+
+    A.text = Text{
+        string: A.label
+    }
+}
+
+forall Graph A; Graph B; Graph Result 
+where Result := or(A, B) 
+{
+
+
+    override A.icon.color = rgba(0.0, 0.5, 0.5, 0.5)
+
+    override B.icon.color = rgba(0.0, 0.5, 0.5, 0.5)
+
+    Result.icon2 = Circle {
+        strokeWidth: 0.0
+        center: Result.icon.center
+        r: Result.icon.r - 1.0
+        color: rgba(0.5, 0.5, 0.0, 0.5)
+    }
+
+
+    override Result.text = Circle{
+        strokeWidth: 0.0
+        r : 0.0
+    }
+
+
+    ensure smallerThan(A.icon, Result.icon)
+    ensure smallerThan(B.icon, Result.icon)
+
+    ensure contains(Result.icon2, A.icon, 5.0)
+    ensure contains(Result.icon2, B.icon, 5.0)
+
+    ensure disjoint(A.icon, B.icon)
+
+    ensure minSize(Result.icon)
+    ensure minSize(A.icon)
+    ensure minSize(B.icon)
+
+    ensure maxSize(Result.icon)
+    ensure maxSize(A.icon)
+    ensure maxSize(B.icon)
+
+    ensure contains(A.icon, A.text)
+    ensure contains(B.icon, B.text)
+
+   
+}
