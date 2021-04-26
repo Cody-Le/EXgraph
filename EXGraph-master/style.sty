@@ -1,3 +1,11 @@
+variable {
+    primary = rgba(1, 1, 0, 1)
+    secondary = rgba(0,0.9,0.9,1)
+}
+
+
+
+
 forall Graph A
 {
     A.icon = Circle {
@@ -8,22 +16,25 @@ forall Graph A
     A.text = Text{
         string: A.label
     }
+
+
+    ensure contains(A.icon, A.text)
+    A.text above A.icon
 }
 
 forall Graph A; Graph B; Graph Result 
 where Result := or(A, B) 
 {
 
+    override A.icon.color = variable.primary
 
-    override A.icon.color = rgba(0.0, 0.5, 0.5, 0.5)
-
-    override B.icon.color = rgba(0.0, 0.5, 0.5, 0.5)
+    override B.icon.color = variable.primary
 
     Result.icon2 = Circle {
         strokeWidth: 0.0
         center: Result.icon.center
         r: Result.icon.r - 1.0
-        color: rgba(0.5, 0.5, 0.0, 0.5)
+        color: variable.secondary
     }
 
 
@@ -52,5 +63,58 @@ where Result := or(A, B)
     ensure contains(A.icon, A.text)
     ensure contains(B.icon, B.text)
 
-   
+    A.icon above Result.icon2
+    B.icon above Result.icon2
 }
+
+forall Graph A; Graph B; Graph Result 
+where Result := if(A, B) 
+{
+    
+    override Result.icon = Circle{
+        strokeWidth: 0.0
+        color: variable.primary
+
+
+
+
+    }
+
+    override Result.icon2 = Circle{
+        strokeWidth: 0.0
+        color: variable.secondary
+    }
+
+    
+
+
+
+    override Result.icon2.r = Result.icon.r / 1.6
+
+
+
+
+   
+    ensure outsideOf(A.text, Result.icon2)
+    ensure contains(Result.icon, A.text)
+    ensure contains(Result.icon2, B.text)
+
+
+
+    ensure maxSize(Result.icon)
+    ensure minSize(Result.icon)
+    ensure maxSize(Result.icon2)
+    ensure minSize(Result.icon2)
+    ensure contains(Result.icon, Result.icon2)
+
+    ensure smallerThan(Result.icon, Result.icon2, 0.5)
+    ensure contains(Result.icon2, B.icon)
+
+
+    Result.icon2 above Result.icon
+
+
+
+
+}
+
